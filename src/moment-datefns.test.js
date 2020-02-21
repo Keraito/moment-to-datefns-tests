@@ -1,13 +1,13 @@
 import moment from 'moment';
 import { format, isAfter, isBefore, differenceInDays } from 'date-fns';
-import enLocale from 'date-fns/locale/en';
+import enLocale from 'date-fns/locale/en-GB';
 import nlLocale from 'date-fns/locale/nl';
 
 describe('These moment and date-fns function calls should be the same', () => {
   test('moment array formatting', () => {
     const stringDateFormat = 'YYYY-MM-DD';
     expect(moment(['2020', '02', '21']).format(stringDateFormat)).toBe(
-      format(new Date('2020', '02', '21'), stringDateFormat)
+      format(new Date('2020', '02', '21'), 'yyyy-MM-dd')
     );
   });
   test('isAfter with date string', () => {
@@ -36,7 +36,7 @@ describe('These moment and date-fns function calls should be the same', () => {
         .locale('en-GB')
         .format('LL')
     ).toBe(
-      format(new Date('2020-02-21'), 'DD MMMM YYYY', { locale: enLocale })
+      format(new Date('2020-02-21'), 'dd MMMM yyyy', { locale: enLocale })
     );
   });
   test('LL formatting in nl-NL locale', () => {
@@ -45,7 +45,7 @@ describe('These moment and date-fns function calls should be the same', () => {
         .locale('nl-NL')
         .format('LL')
     ).toBe(
-      format(new Date('2020-02-21'), 'DD MMMM YYYY', { locale: nlLocale })
+      format(new Date('2020-02-21'), 'dd MMMM yyyy', { locale: nlLocale })
     );
   });
   test('ll formatting in en-GB locale', () => {
@@ -53,7 +53,7 @@ describe('These moment and date-fns function calls should be the same', () => {
       moment('2020-02-21')
         .locale('en-GB')
         .format('ll')
-    ).toBe(format(new Date('2020-02-21'), 'DD MMM YYYY', { locale: enLocale }));
+    ).toBe(format(new Date('2020-02-21'), 'dd MMM yyyy', { locale: enLocale }));
   });
   // This is not entirely the same, namely "feb." instead of "feb", but this is neglectible for our use cases.
   test.skip('ll formatting in nl-NL locale', () => {
@@ -61,16 +61,16 @@ describe('These moment and date-fns function calls should be the same', () => {
       moment('2020-02-21')
         .locale('nl-NL')
         .format('ll')
-    ).toBe(format(new Date('2020-02-21'), 'DD MMM YYYY', { locale: nlLocale }));
+    ).toBe(format(new Date('2020-02-21'), 'dd MMM yyyy', { locale: nlLocale }));
   });
   test('diff days', () => {
     expect(moment().diff(moment('2017-02-28T11:34:41.814Z'), 'days')).toBe(
-      differenceInDays(new Date(), '2017-02-28T11:34:41.814Z')
+      differenceInDays(new Date(), new Date('2017-02-28T11:34:41.814Z'))
     );
   });
   test('MMM YYYY formatting', () => {
     expect(moment('2017-02-28T11:34:41.814Z').format('MMM YYYY')).toBe(
-      format(new Date('2017-02-28T11:34:41.814Z'), 'MMM YYYY')
+      format(new Date('2017-02-28T11:34:41.814Z'), 'MMM yyyy')
     );
   });
   test('getting the individual date values', () => {
