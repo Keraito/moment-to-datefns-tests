@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { format, isAfter, isBefore, differenceInDays } from 'date-fns';
-import enLocale from 'date-fns/locale/en-GB';
+import enLocale from 'date-fns/locale/en-US';
 import nlLocale from 'date-fns/locale/nl';
 
 describe('These moment and date-fns function calls should be the same', () => {
@@ -30,39 +30,56 @@ describe('These moment and date-fns function calls should be the same', () => {
       isBefore(new Date(beforeDateString), new Date())
     );
   });
-  test('LL formatting in en-GB locale', () => {
+
+  // Locale formatting tests, these p/P values only work with date-fns@^2.0.0
+  // This is slightly different, namely "21st" instead of just "21". This should be neglectible.
+  test.skip('LL formatting in en (en-US) locale', () => {
     expect(
       moment('2020-02-21')
-        .locale('en-GB')
+        .locale('en')
         .format('LL')
-    ).toBe(
-      format(new Date('2020-02-21'), 'dd MMMM yyyy', { locale: enLocale })
-    );
+    ).toBe(format(new Date('2020-02-21'), 'PPP', { locale: enLocale }));
   });
   test('LL formatting in nl-NL locale', () => {
     expect(
       moment('2020-02-21')
         .locale('nl-NL')
         .format('LL')
+    ).toBe(format(new Date('2020-02-21'), 'PPP', { locale: nlLocale }));
+  });
+  test('lll formatting in en (en-US) locale', () => {
+    expect(
+      moment('2019-10-15T09:48:54.135Z')
+        .locale('en')
+        .format('lll')
     ).toBe(
-      format(new Date('2020-02-21'), 'dd MMMM yyyy', { locale: nlLocale })
+      format(new Date('2019-10-15T09:48:54.135Z'), 'PP p', { locale: null })
     );
   });
-  test('ll formatting in en-GB locale', () => {
+  test('lll formatting in nl-NL locale', () => {
+    expect(
+      moment('2019-10-15T09:48:54.135Z')
+        .locale('nl-NL')
+        .format('lll')
+    ).toBe(
+      format(new Date('2019-10-15T09:48:54.135Z'), 'PP p', { locale: nlLocale })
+    );
+  });
+  test('ll formatting in en (en-US) locale', () => {
     expect(
       moment('2020-02-21')
-        .locale('en-GB')
+        .locale('en')
         .format('ll')
-    ).toBe(format(new Date('2020-02-21'), 'dd MMM yyyy', { locale: enLocale }));
+    ).toBe(format(new Date('2020-02-21'), 'PP', { locale: enLocale }));
   });
-  // This is not entirely the same, namely "feb." instead of "feb", but this is neglectible for our use cases.
-  test.skip('ll formatting in nl-NL locale', () => {
+  test('ll formatting in nl-NL locale', () => {
     expect(
       moment('2020-02-21')
         .locale('nl-NL')
         .format('ll')
-    ).toBe(format(new Date('2020-02-21'), 'dd MMM yyyy', { locale: nlLocale }));
+    ).toBe(format(new Date('2020-02-21'), 'PP', { locale: nlLocale }));
   });
+
   test('diff days', () => {
     expect(moment().diff(moment('2017-02-28T11:34:41.814Z'), 'days')).toBe(
       differenceInDays(new Date(), new Date('2017-02-28T11:34:41.814Z'))
