@@ -113,3 +113,32 @@ describe('These moment and date-fns function calls should be the same', () => {
     });
   });
 });
+
+describe('date-fns edge cases', () => {
+  test('new date is not before new date', () => {
+    expect(isBefore(new Date(), new Date())).toBe(false);
+  });
+});
+
+describe('moment edge cases', () => {
+  test('undefined moment isbefore future', () => {
+    expect(moment(undefined).isBefore(moment('3030-01-01'))).toBe(
+      isBefore(new Date(), new Date('3030-01-01'))
+    );
+  });
+  test('future isbefore undefined moment', () => {
+    expect(moment('3030-01-01').isBefore(moment(undefined))).toBe(
+      isBefore(new Date('3030-01-01'), new Date())
+    );
+  });
+  test('undefined isbefore some moment in the past', () => {
+    expect(moment(undefined).isBefore(moment('2019-01-01'))).toBe(
+      isBefore(new Date(), new Date('2019-01-01'))
+    );
+  });
+  test('some moment in the past isbefore undefined', () => {
+    expect(moment('2019-01-01').isBefore(moment(undefined))).toBe(
+      isBefore(new Date('2019-01-01'), new Date())
+    );
+  });
+});
